@@ -19,10 +19,9 @@ var stopCmd = &cobra.Command{
 				logging.Log(err.Error())
 				return
 			}
-			fmt.Println("Hoot stopped")
+      fmt.Println("Hoot stopped")
 			return
 		}
-
 		fmt.Println("Hoot not started yet")
 	},
 }

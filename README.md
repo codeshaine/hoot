@@ -1,12 +1,33 @@
-```go
-	err := beeep.Notify("Hoop Alert", "See Some Grass!", "")
-	if err != nil {
-    fmt.Printf("hoop error: %v\n",err)
-	}
+## Hoot
 
-	if err := exec.Command("pw-play", "/usr/share/sounds/freedesktop/stereo/message.oga").Run(); err != nil {
-    fmt.Printf("hoop error: %v\n",err)
-	}
+Hoot is Promodoro like timer app which remind you to look away from screen. for now this is only compatible with linux systems. 
 
+## Installation
+```
+go install github.com/codeshaine/hoot@latest
 
 ```
+
+## Usage
+
+```bash
+hoot start --interval 10s 
+hoot stop
+hoot status
+
+```
+## Configuration (optional)
+hoot make use of config file for custom notification sound which reside in your
+```
+$HOME/.config/hoot/config.yml
+
+```
+Current prop supported
+```yml
+sound: 
+interval: 10s
+
+```
+
+
+

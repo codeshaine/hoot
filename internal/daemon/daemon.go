@@ -20,18 +20,25 @@ const (
 
 const PID_FILE = "/tmp/hoot.pid"
 
-func StartDaemon() error {
+func StartDaemon(interval time.Duration) error {
 	executable, err := os.Executable()
 	if err != nil {
 		return fmt.Errorf("failed to get executable path: %v", err)
 	}
-	cmd := exec.Command(executable, "start")
+	cmd := exec.Command(executable, "start","--daemon","--interval",interval.String())
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Setsid: true,
 	}
-	cmd.Stdout = nil
-	cmd.Stderr = nil
+
+	logFile, err := os.OpenFile(logging.LOG_FILE, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		return err
+	}
+	defer logFile.Close()
+
+	cmd.Stdout = logFile
+	cmd.Stderr = logFile
 	cmd.Stdin = nil
 
 	err = cmd.Start()

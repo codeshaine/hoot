@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/codeshaine/hoot/internal/daemon"
 	"github.com/codeshaine/hoot/internal/logging"
@@ -15,21 +16,30 @@ var startCmd = &cobra.Command{
 	Short: "It starts your hoot timer",
 	Long:  "It starts your hoot timer.",
 	Run: func(cmd *cobra.Command, args []string) {
-		minute := viper.GetDuration("interval")
-    fmt.Println(daemon.Status())
+		interval := viper.GetDuration("interval")
+		d, _ := cmd.Flags().GetBool("daemon")
 		if daemon.Status() == daemon.IDLE {
-			err := daemon.StartDaemon()
+			err := daemon.StartDaemon(interval)
 			if err != nil {
 				logging.Log(err.Error())
 			}
 			return
 		}
-		go func() {
-			fmt.Println("Hoot started")
-			daemon.StartHoot(minute)
-		}()
+		if d {
+			logging.Log("Hoot started")
+			daemon.StartHoot(interval)
+			return
+		}
+		fmt.Println("Hoot already started")
 	}}
 
 func init() {
+	//for internal usage
+	startCmd.Flags().BoolP("daemon", "d", false, "Internal flag to indicate daemon process")
+	startCmd.Flags().MarkHidden("daemon")
+
+	//user
+	startCmd.Flags().DurationP("interval", "i", 25*time.Minute, "Duration of the hoot interval (e.g., 10m, 1h)")
+	viper.BindPFlag("interval", startCmd.Flags().Lookup("interval"))
 	rootCmd.AddCommand(startCmd)
 }

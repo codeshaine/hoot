@@ -8,7 +8,7 @@ import (
 )
 
 func WritePID(pid int) error {
-	logFile, err := os.OpenFile(PID_FILE, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logFile, err := os.OpenFile(PID_FILE, os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		return err
 	}
@@ -30,6 +30,7 @@ func ReadPID() (int, error) {
 
 	return pid, nil
 }
+
 func DeletePID() error {
 	err := os.Remove(PID_FILE)
 	if err != nil {
