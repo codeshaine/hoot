@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/codeshaine/hoot/internal/daemon"
 	"github.com/codeshaine/hoot/internal/logging"
@@ -38,8 +37,5 @@ func init() {
 	startCmd.Flags().BoolP("daemon", "d", false, "Internal flag to indicate daemon process")
 	startCmd.Flags().MarkHidden("daemon")
 
-	//user
-	startCmd.Flags().DurationP("interval", "i", 25*time.Minute, "Duration of the hoot interval (e.g., 10m, 1h)")
-	viper.BindPFlag("interval", startCmd.Flags().Lookup("interval"))
 	rootCmd.AddCommand(startCmd)
 }
